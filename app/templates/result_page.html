@@ -1,0 +1,123 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>搜索结果</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #e6f7ff, #d9effc);
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        h1 {
+            text-align: center;
+            color: #007acc;
+            margin-top: 20px;
+        }
+        p {
+            font-size: 16px;
+        }
+        a {
+            color: #0056b3;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            background: #ffffff;
+            border: 1px solid #cce7ff;
+            border-radius: 10px;
+            margin: 10px auto;
+            padding: 15px;
+            max-width: 800px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .save-snapshot-btn {
+            background: linear-gradient(90deg, #4facfe, #00f2fe);
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            font-size: 14px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .save-snapshot-btn:hover {
+            background: linear-gradient(90deg, #00f2fe, #4facfe);
+        }
+        .container {
+            padding: 20px;
+        }
+        .no-results {
+            text-align: center;
+            font-size: 18px;
+            color: #777;
+            margin-top: 50px;
+        }
+        .back-link {
+            display: inline-block;
+            margin-top: 20px;
+            text-align: center;
+            color: #007acc;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>搜索结果</h1>
+
+        <p>您搜索的关键词是：<strong>{{ keywords }}</strong></p>
+
+        {% if results %}
+            <h2>共找到 {{ len_results }} 条相关结果，用时 {{ cost_time }} 秒：</h2>
+            <ul>
+                {% for title, url, description, weighted_score in results %}
+                    <li>
+                        <a href="{{ url }}" target="_blank"><strong>{{ title }}</strong></a>
+                        <p>{{ description }}</p>
+                        <p>加权得分：{{ weighted_score }}</p>
+                        <button class="save-snapshot-btn" data-url="{{ url }}" data-title="{{ title }}">保存快照</button>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <div class="no-results">
+                <h2>未找到与 "{{ keywords }}" 相关的内容。</h2>
+                <p>请尝试使用其他关键词或检查输入是否正确。</p>
+            </div>
+        {% endif %}
+
+        <p class="back-link">
+            <a href="{{ url_for('front.index') }}">返回搜索页面</a>
+        </p>
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            $('.save-snapshot-btn').on('click', function() {
+                const url = $(this).data('url');
+                const title = $(this).data('title');
+
+                $.post("{{ url_for('snapshot.add_snapshot') }}", { url, title })
+                    .done(function(response) {
+                        alert(response.message);
+                    })
+                    .fail(function(xhr) {
+                        alert(xhr.responseJSON.message || "保存失败，请重试！");
+                    });
+            });
+        });
+    </script>
+</body>
+</html>

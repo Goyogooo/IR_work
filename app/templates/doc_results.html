@@ -1,0 +1,90 @@
+
+
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>南开文库 - 文档结果</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #f0f8ff, #d9effc);
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        h1 {
+            text-align: center;
+            color: #0056b3;
+            margin-top: 20px;
+        }
+        p {
+            font-size: 16px;
+            text-align: center;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            background: #ffffff;
+            border: 1px solid #cce7ff;
+            border-radius: 10px;
+            margin: 10px auto;
+            padding: 15px;
+            max-width: 800px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        a {
+            color: #0056b3;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .container {
+            padding: 20px;
+        }
+        .no-results {
+            text-align: center;
+            font-size: 18px;
+            color: #777;
+            margin-top: 50px;
+        }
+        .back-link {
+            display: inline-block;
+            margin-top: 20px;
+            text-align: center;
+            color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>南开文库</h1>
+
+        {% if documents %}
+            <p>以下是与 “{{ keyword }}” 相关的文档：</p>
+            <ul>
+                {% for doc in documents %}
+                <li>
+                    <a href="{{ url_for('file_download.download_file', filename=doc['file_name']) }}" target="_blank">
+                        {{ doc['file_name'] }}
+                    </a>
+                </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <div class="no-results">
+                <p>没有找到与 “{{ keyword }}” 相关的文档。</p>
+            </div>
+        {% endif %}
+
+        <p class="back-link">
+            <a href="{{ url_for('front.index') }}">返回搜索页面</a>
+        </p>
+    </div>
+</body>
+</html>

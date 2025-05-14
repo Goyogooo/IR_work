@@ -1,0 +1,110 @@
+
+
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>南开新闻检索 - 首页</title>
+    <style>
+        /* 页面背景和全局字体 */
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #f0f4f7, #d6e6f2);
+            color: #333;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        /* 容器样式 */
+        .container {
+            text-align: center;
+            background-color: #ffffff;
+            border-radius: 8px;
+            padding: 30px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 600px;
+        }
+
+        /* 标题样式 */
+        h1 {
+            font-size: 2em;
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+
+        /* 链接和按钮 */
+        a {
+            text-decoration: none;
+            color: #2980b9;
+            font-size: 1em;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        /* 导航链接样式 */
+        .nav {
+            margin-bottom: 30px;
+        }
+
+        .nav a {
+            display: block;
+            margin: 10px 0;
+            font-size: 1.2em;
+        }
+
+        /* 推荐部分 */
+        h2 {
+            color: #34495e;
+            margin-top: 20px;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        li {
+            margin: 10px 0;
+            font-size: 1em;
+        }
+
+        li span {
+            color: #888;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>南开新闻检索</h1>
+        <p>欢迎，{{ session['username'] }}！</p>
+        <div class="nav">
+            <a href="{{ url_for('search.search_page') }}">基础搜索</a>
+            <a href="{{ url_for('advanced_search.advanced_search') }}">高级搜索</a>
+            <a href="{{ url_for('snapshot.my_snapshots') }}">我的快照</a>
+            <a href="{{ url_for('auth.logout') }}">退出登录</a>
+        </div>
+        <h2>个性化推荐：</h2>
+        <ul>
+            {% if recommended_results %}
+                {% for result in recommended_results %}
+                    <li>
+                        <a href="{{ result['url'] }}" target="_blank">{{ result['title'] }}</a>
+                        <span>（加权得分: {{ result['score'] }}）</span>
+                    </li>
+                {% endfor %}
+            {% else %}
+                <p>没有找到个性化推荐。</p>
+            {% endif %}
+        </ul>
+    </div>
+</body>
+</html>

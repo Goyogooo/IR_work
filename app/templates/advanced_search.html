@@ -1,0 +1,155 @@
+
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>高级搜索</title>
+    <style>
+        /* 页面背景及全局样式 */
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #eef2f3, #8e9eab);
+            color: #333;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        /* 容器样式 */
+        .container {
+            background: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            padding: 30px;
+            text-align: center;
+            width: 90%;
+            max-width: 600px;
+        }
+
+        /* 标题样式 */
+        h1 {
+            font-size: 2em;
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+
+        /* 表单样式 */
+        form {
+            margin-bottom: 30px;
+        }
+
+        label {
+            display: inline-block;
+            text-align: left;
+            width: 100%;
+            margin-bottom: 5px;
+            font-size: 1em;
+            color: #555;
+        }
+
+        input[type="text"],
+        input[type="checkbox"] {
+            width: 80%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 1em;
+        }
+
+        input[type="checkbox"] {
+            width: auto;
+            margin-left: 10px;
+        }
+
+        button {
+            background-color: #3498db;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            font-size: 1em;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #2980b9;
+        }
+
+        /* 链接样式 */
+        a {
+            text-decoration: none;
+            color: #3498db;
+            font-size: 1em;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        /* 搜索历史样式 */
+        h2 {
+            font-size: 1.5em;
+            color: #34495e;
+            margin-bottom: 10px;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        li {
+            margin: 5px 0;
+        }
+
+        li a {
+            color: #3498db;
+        }
+
+        li a:hover {
+            text-decoration: underline;
+        }
+
+        p {
+            color: #666;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>高级搜索</h1>
+        <!-- 搜索表单 -->
+        <form method="POST">
+            <label>关键字：</label>
+            <input type="text" name="all_these_words" placeholder="输入所有匹配字词">
+            <label>
+                <input type="checkbox" name="enable_wildcard" value="yes"> 是否启用通配查询
+            </label>
+            <label>短语查询：</label>
+            <input type="text" name="exact_phrase" placeholder="输入短语，用双引号括起来，逗号间隔">
+            <label>限定站点或域名：</label>
+            <input type="text" name="site_or_domain" placeholder="输入站点或域名">
+            <button type="submit">高级搜索</button>
+        </form>
+
+        <p><a href="{{ url_for('front.index') }}">返回首页</a></p>
+
+        <h2>搜索历史</h2>
+        {% if search_history %}
+            <ul>
+                {% for keyword in search_history %}
+                    <li><a href="{{ url_for('advanced_search.advanced_search', keywords=keyword) }}">{{ keyword }}</a></li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>暂无搜索历史。</p>
+        {% endif %}
+    </div>
+</body>
+</html>
